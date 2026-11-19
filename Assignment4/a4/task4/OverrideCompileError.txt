@@ -1,0 +1,15 @@
+Task 4.4 - what @Override does.
+
+Change TODO 1 to:
+
+    @Override public void mouseclicked(MouseEvent e) { ... }
+
+javac reports:
+
+    error: method does not override or implement a method from a supertype
+        @Override public void mouseclicked(MouseEvent e)
+        ^
+
+(IntelliJ underlines it red immediately: "Method does not override method from its superclass".)
+The typo is caught at compile time instead of showing up as "nothing happens" at run time.
+Do this in your own copy of DrawPad (not in this project, or the project will no longer build).

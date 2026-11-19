@@ -1,0 +1,23 @@
+// TASK 1.1 - the ORIGINAL poor design (kept as .txt so it does not break compilation)
+// Deficiencies (see docs/ANSWERS.md for the full diagnosis):
+//  1 UI + validation + JDBC + business logic in one listener      -> untestable, unmaintainable
+//  2 e.getActionCommand() == "Pay"  compares references, not text -> may never match
+//  3 Double.parseDouble(amount) with no validation                -> NumberFormatException, silent failure
+//  4 JDBC + Thread.sleep(3000) on the event-dispatch thread       -> window frozen for 3 s
+//  5 string-concatenated SQL                                       -> SQL injection
+//  6 checked SQLException / InterruptedException not handled       -> does not even compile
+//  7 only System.out.println feedback                              -> user sees nothing
+//  8 Receipt button has no behaviour; no window-closing handler; connection never closed
+public class FeeWindow extends Frame implements ActionListener {
+    TextField regNo = new TextField(); TextField amount = new TextField();
+    Button pay = new Button("Pay"), clear = new Button("Clear"), receipt = new Button("Receipt");
+    public void actionPerformed(ActionEvent e) {
+        if (e.getActionCommand() == "Pay") {
+            double a = Double.parseDouble(amount.getText());
+            Connection c = DriverManager.getConnection(URL, USER, PWD);
+            c.createStatement().executeUpdate("INSERT INTO fees VALUES('" + regNo.getText() + "'," + a + ")");
+            Thread.sleep(3000);
+            System.out.println("Paid");
+        } else { regNo.setText(""); amount.setText(""); }
+    }
+}

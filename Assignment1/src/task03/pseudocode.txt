@@ -1,0 +1,26 @@
+ALGORITHM AllocateSlot(slots, vehicleNo)
+  INPUT : jagged array slots, vehicle number vehicleNo
+  OUTPUT: position {floor, slot} or NULL
+  FOR floor <- 0 TO LENGTH(slots) - 1 DO
+      FOR slot <- 0 TO LENGTH(slots[floor]) - 1 DO
+          IF slots[floor][slot] = NULL THEN
+              slots[floor][slot] <- vehicleNo
+              RETURN {floor, slot}
+          END IF
+      END FOR
+  END FOR
+  RETURN NULL                         // facility full
+END ALGORITHM
+
+ALGORITHM ComputeFee(type, minutes)
+  INPUT : vehicle type, parked minutes   OUTPUT: fee
+  IF minutes <= 0 THEN RETURN 0
+  SET (first, extra, cap) <- rates for type   (SWITCH on type; unknown -> ERROR)
+  hours <- (minutes + 59) DIV 60
+  total <- first
+  FOR h <- 2 TO hours DO
+      total <- total + extra
+      IF total >= cap THEN total <- cap; BREAK
+  END FOR
+  RETURN MIN(total, cap)
+END ALGORITHM
